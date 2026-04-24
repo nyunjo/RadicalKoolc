@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterController controller;
+    private Animator animator;
 
     public float speed = 3f;
     public float turnSpeed = 180f;
@@ -11,16 +12,28 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
        controller = GetComponent<CharacterController>(); 
+       animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {   
         Vector3 movDir;
 
         transform.Rotate(0, Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime, 0);
         movDir = transform.forward * Input.GetAxis("Vertical") * speed;
 
         controller.Move(movDir * Time.deltaTime - Vector3.up * 0.1f);
+
+        PlayerAnimation();
     }
+
+    void PlayerAnimation(){
+
+        float animSpeed = controller.velocity.magnitude;
+        //Debug.Log(animSpeed);
+
+        animator.SetFloat("walkSpeed", animSpeed);
+    }
+
 }
